@@ -1,0 +1,158 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #EBEBEB;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 24px 12px;
+}
+
+.btnBack {
+  background: #FFFFFF;
+  border: 1px solid #BBBBBB;
+  border-radius: 40px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333333;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnBack:hover {
+  background: #F5F5F5;
+}
+
+.btnGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.btnDownload {
+  background: #FFFFFF;
+  border: 1px solid #BBBBBB;
+  border-radius: 40px;
+  padding: 9px 28px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #333333;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnDownload:hover {
+  background: #F5F5F5;
+}
+
+.btnCopy {
+  background: #8B8FD4;
+  border: none;
+  border-radius: 40px;
+  padding: 9px 32px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnCopy:hover {
+  background: #7A7EC4;
+}
+
+.main {
+  flex: 1;
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 12px;
+  padding: 32px 48px;
+  overflow-y: auto;
+  min-height: 500px;
+}
+
+.repoTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 14px;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #DDDDDD;
+  margin-bottom: 24px;
+}
+
+.content {
+  line-height: 1.7;
+  color: #222222;
+  font-size: 15px;
+}
+
+.content h1,
+.content h2,
+.content h3 {
+  margin: 20px 0 10px;
+  font-weight: 700;
+}
+
+.content p {
+  margin-bottom: 12px;
+}
+
+.content pre {
+  background: #F5F5F5;
+  border: 1px solid #E0E0E0;
+  border-radius: 6px;
+  padding: 16px;
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.content code {
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-size: 13px;
+}
+
+.content ul,
+.content ol {
+  padding-left: 24px;
+  margin-bottom: 12px;
+}
+
+.content a {
+  color: #8B8FD4;
+  text-decoration: underline;
+}
+
+.content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.content th,
+.content td {
+  border: 1px solid #DDDDDD;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.content th {
+  background: #F5F5F5;
+  font-weight: 600;
+}

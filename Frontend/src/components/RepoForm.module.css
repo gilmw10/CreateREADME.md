@@ -1,0 +1,108 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.separator {
+  font-size: 20px;
+  font-weight: 300;
+  color: #888888;
+  padding-bottom: 10px;
+  flex-shrink: 0;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.input {
+  width: 100%;
+  padding: 11px 18px;
+  font-size: 14px;
+  border: 1px solid #BBBBBB;
+  border-radius: 40px;
+  background: transparent;
+  color: #111111;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.input:focus {
+  border-color: #8B8FD4;
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.urlSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputFull {
+  width: 100%;
+  padding: 11px 18px;
+  font-size: 14px;
+  border: 1px solid #BBBBBB;
+  border-radius: 40px;
+  background: transparent;
+  color: #111111;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.inputFull:focus {
+  border-color: #8B8FD4;
+}
+
+.inputFull:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnWrap {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.submitBtn {
+  padding: 12px 52px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #ffffff;
+  background: #8B8FD4;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #7A7EC4;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
