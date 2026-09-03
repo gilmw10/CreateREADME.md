@@ -1,64 +1,71 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, HTTPException
 
-from github_service import (
-    get_analysis
-)
+from github_service import get_analysis
+from ai_service import generate_readme
 
-from gemini_service import (
-    generate_readme
-)
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 @app.get("/")
-def root():
+async def root():
     return {
         "message": "README Generator API"
     }
 
 
-@app.get(
-    "/github/{owner}/{repo}"
-)
+@app.get("/github/{owner}/{repo}")
 async def analyze_repo(
     owner: str,
     repo: str
 ):
-    return await get_analysis(
-        owner,
-        repo
-    )
+    try:
+        analysis = await get_analysis(
+            owner,
+            repo
+        )
+
+        return analysis
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 
 
-@app.get(
-    "/readme/{owner}/{repo}"
-)
+@app.get("/readme/{owner}/{repo}")
 async def create_readme(
     owner: str,
     repo: str
 ):
+    try:
+        # GitHub 저장소 분석
+        analysis = await get_analysis(
+            owner,
+            repo
+        )
 
-    analysis = await get_analysis(
-        owner,
-        repo
-    )
+        # AI README 생성
+        readme = await generate_readme(
+            analysis
+        )
 
-    readme = await generate_readme(
-        analysis
-    )
+        return {
+            "repository": analysis[
+                "repository"
+            ]["name"],
+            "readme": readme
+        }
 
-    return {
-        "repository": analysis[
-            "repository"
-        ]["name"],
-        "readme": readme
-    }
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )

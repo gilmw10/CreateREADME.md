@@ -1,11 +1,13 @@
 import json
 
 
-def analyze_requirements(requirements_text: str):
-    result = []
+def analyze_requirements(
+    requirements_text: str
+):
+    tech_stack = []
 
     if not requirements_text:
-        return result
+        return tech_stack
 
     text = requirements_text.lower()
 
@@ -17,44 +19,66 @@ def analyze_requirements(requirements_text: str):
         "django": "Django",
         "flask": "Flask",
         "pytest": "Pytest",
+        "numpy": "NumPy",
+        "pandas": "Pandas",
+        "requests": "Requests",
+        "httpx": "HTTPX",
+        "psycopg": "PostgreSQL",
+        "asyncpg": "PostgreSQL"
     }
 
-    for key, value in mapping.items():
-        if key in text:
-            result.append(value)
+    for keyword, name in mapping.items():
+        if keyword in text:
+            tech_stack.append(name)
 
-    return result
+    return tech_stack
 
 
-def analyze_package_json(package_json_text: str):
-    result = []
+def analyze_package_json(
+    package_json_text: str
+):
+    tech_stack = []
 
     if not package_json_text:
-        return result
+        return tech_stack
 
     try:
-        package_data = json.loads(package_json_text)
+        package_data = json.loads(
+            package_json_text
+        )
 
-        deps = package_data.get("dependencies", {})
-        dev_deps = package_data.get("devDependencies", {})
+        dependencies = package_data.get(
+            "dependencies",
+            {}
+        )
 
-        all_deps = {**deps, **dev_deps}
+        dev_dependencies = package_data.get(
+            "devDependencies",
+            {}
+        )
+
+        all_dependencies = {
+            **dependencies,
+            **dev_dependencies
+        }
 
         mapping = {
             "react": "React",
             "next": "Next.js",
+            "vue": "Vue",
             "axios": "Axios",
             "typescript": "TypeScript",
             "tailwindcss": "TailwindCSS",
             "vite": "Vite",
-            "express": "Express"
+            "express": "Express",
+            "prisma": "Prisma"
         }
 
-        for key, value in mapping.items():
-            if key in all_deps:
-                result.append(value)
+        for keyword, name in mapping.items():
+            if keyword in all_dependencies:
+                tech_stack.append(name)
 
-    except Exception:
+    except json.JSONDecodeError:
         pass
 
-    return result
+    return tech_stack
