@@ -76,6 +76,7 @@ async def get_file_content(
         file_info = await github_get(
             url
         )
+
     except Exception:
         return None
 
@@ -124,7 +125,7 @@ def find_file(
     if not matches:
         return None
 
-    # 루트에 가까운 파일 우선
+    # 루트 디렉토리에 가까운 파일 우선
     matches.sort(
         key=lambda path: (
             path.count("/"),
@@ -135,12 +136,28 @@ def find_file(
     return matches[0]
 
 
+def shorten_text(
+    text: str | None,
+    max_length: int
+):
+    if not text:
+        return None
+
+    if len(text) <= max_length:
+        return text
+
+    return (
+        text[:max_length]
+        + "\n\n[내용 일부 생략]"
+    )
+
+
 async def get_analysis(
     owner: str,
     repo: str
 ):
     # --------------------------
-    # 1. 저장소 기본 정보
+    # 1. 저장소 정보
     # --------------------------
 
     repo_url = (
@@ -190,7 +207,7 @@ async def get_analysis(
     ]
 
     # --------------------------
-    # 3. 중요 파일 찾기
+    # 3. 주요 파일 찾기
     # --------------------------
 
     requirements_path = find_file(
@@ -219,7 +236,7 @@ async def get_analysis(
     )
 
     # --------------------------
-    # 4. 중요 파일 내용 읽기
+    # 4. 주요 파일 읽기
     # --------------------------
 
     requirements_text = None
@@ -295,7 +312,6 @@ async def get_analysis(
         )
     )
 
-    # GitHub이 판단한 주 언어
     github_language = repo_info.get(
         "language"
     )
@@ -305,13 +321,12 @@ async def get_analysis(
             github_language
         )
 
-    # Dockerfile 존재
     if dockerfile_path:
         tech_stack.append(
             "Docker"
         )
 
-    # 중복 제거
+    # 순서 유지하며 중복 제거
     tech_stack = list(
         dict.fromkeys(
             tech_stack
@@ -319,7 +334,7 @@ async def get_analysis(
     )
 
     # --------------------------
-    # 6. 프로젝트 유형 간단 추론
+    # 6. 프로젝트 종류 추론
     # --------------------------
 
     project_type = "Unknown"
@@ -331,20 +346,15 @@ async def get_analysis(
     )
 
     if "FastAPI(" in python_source:
-        project_type = (
-            "FastAPI Backend"
-        )
+        project_type = "FastAPI Backend"
 
     elif "Flask(" in python_source:
-        project_type = (
-            "Flask Backend"
-        )
+        project_type = "Flask Backend"
 
     if "React" in tech_stack:
         if project_type == "Unknown":
-            project_type = (
-                "React Frontend"
-            )
+            project_type = "React Frontend"
+
         else:
             project_type += (
                 " + React Frontend"
@@ -356,36 +366,37 @@ async def get_analysis(
         )
 
     # --------------------------
-    # 7. AI에 전달할 파일 구조
+    # 7. AI 전송용 데이터 압축
     # --------------------------
 
-    files_for_ai = all_files[:150]
+    # 파일 구조는 최대 50개만 전달
+    files_for_ai = all_files[:50]
 
-    # 너무 큰 파일 전체를 AI에 보내지 않도록 제한
-    if requirements_text:
-        requirements_text = (
-            requirements_text[:10000]
-        )
+    # AI가 기술/실행 방식을 파악할 정도만 전달
+    requirements_for_ai = shorten_text(
+        requirements_text,
+        2500
+    )
 
-    if package_json_text:
-        package_json_text = (
-            package_json_text[:15000]
-        )
+    package_json_for_ai = shorten_text(
+        package_json_text,
+        3500
+    )
 
-    if main_py_text:
-        main_py_text = (
-            main_py_text[:12000]
-        )
+    main_py_for_ai = shorten_text(
+        main_py_text,
+        2500
+    )
 
-    if app_py_text:
-        app_py_text = (
-            app_py_text[:12000]
-        )
+    app_py_for_ai = shorten_text(
+        app_py_text,
+        2500
+    )
 
-    if dockerfile_text:
-        dockerfile_text = (
-            dockerfile_text[:5000]
-        )
+    dockerfile_for_ai = shorten_text(
+        dockerfile_text,
+        1200
+    )
 
     # --------------------------
     # 8. 최종 분석 결과
@@ -396,21 +407,13 @@ async def get_analysis(
             "name": repo_info.get(
                 "name"
             ),
-            "full_name": repo_info.get(
-                "full_name"
-            ),
             "description": repo_info.get(
                 "description"
             ),
             "language": repo_info.get(
                 "language"
             ),
-            "stars": repo_info.get(
-                "stargazers_count"
-            ),
-            "default_branch": (
-                default_branch
-            )
+            "default_branch": default_branch
         },
 
         "project_type": project_type,
@@ -442,23 +445,23 @@ async def get_analysis(
         },
 
         "requirements_txt": (
-            requirements_text
+            requirements_for_ai
         ),
 
         "package_json": (
-            package_json_text
+            package_json_for_ai
         ),
 
-        "main_py": (
-            main_py_text
+        "main_py_excerpt": (
+            main_py_for_ai
         ),
 
-        "app_py": (
-            app_py_text
+        "app_py_excerpt": (
+            app_py_for_ai
         ),
 
         "dockerfile": (
-            dockerfile_text
+            dockerfile_for_ai
         )
     }
 

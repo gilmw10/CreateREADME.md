@@ -27,68 +27,122 @@ client = AsyncGroq(
 async def generate_readme(
     analysis: dict
 ):
+    # AI에 꼭 필요한 데이터만 추림
+    compact_analysis = {
+        "repository": (
+            analysis.get("repository")
+        ),
+
+        "project_type": (
+            analysis.get("project_type")
+        ),
+
+        "tech_stack": (
+            analysis.get("tech_stack")
+        ),
+
+        "files": (
+            analysis.get("files", [])[:50]
+        ),
+
+        "important_files": (
+            analysis.get("important_files")
+        ),
+
+        "requirements_txt": (
+            analysis.get(
+                "requirements_txt"
+            )
+        ),
+
+        "package_json": (
+            analysis.get(
+                "package_json"
+            )
+        ),
+
+        "main_py_excerpt": (
+            analysis.get(
+                "main_py_excerpt"
+            )
+        ),
+
+        "app_py_excerpt": (
+            analysis.get(
+                "app_py_excerpt"
+            )
+        ),
+
+        "dockerfile": (
+            analysis.get(
+                "dockerfile"
+            )
+        )
+    }
+
     analysis_text = json.dumps(
-        analysis,
+        compact_analysis,
         ensure_ascii=False,
         indent=2
     )
 
     system_prompt = """
 너는 GitHub 저장소를 분석하여
-정확하고 전문적인 README.md를 작성하는
-시니어 소프트웨어 개발자다.
+README.md를 작성하는 개발자다.
 
-반드시 실제로 제공된 프로젝트 정보만 사용한다.
+주어진 저장소 정보만 사용한다.
 
-저장소에서 확인할 수 없는 기능이나
-기술을 임의로 만들어내지 않는다.
+확인되지 않은 기능,
+라이브러리,
+실행 명령어는 만들지 않는다.
 
-설치 방법이나 실행 명령어를 확실하게
-판단할 수 없는 경우에는 거짓 명령어를
-만들지 않는다.
-
-출력은 README.md 본문만 반환한다.
-Markdown 코드블록으로 README 전체를
+출력은 README.md 본문만 작성한다.
+README 전체를 ```markdown 코드 블록으로
 감싸지 않는다.
+
+설명은 간결하고 실용적으로 작성한다.
 """
 
     user_prompt = f"""
-아래는 GitHub 저장소를 분석한 결과다.
-
-이 정보를 기반으로 해당 프로젝트의
+다음 GitHub 저장소 분석 결과를 기반으로
 README.md를 작성해라.
 
-[작성 규칙]
+필요한 구성:
 
-0. 이모티콘은 사용하지 않고 한국어로 작성한다.
+# 프로젝트 이름
 
-1. 가장 위에는 프로젝트 이름을
-   # 제목 형식으로 작성한다.
+프로젝트에 대한 짧은 소개
 
-2. 프로젝트 설명을 작성한다.
+## 주요 기능
 
-3. 실제 코드와 파일 구조에서 확인 가능한
-   주요 기능을 정리한다.
+코드와 파일 구조에서 확인할 수 있는
+기능만 작성
 
-4. 기술 스택을 정리한다.
+## 기술 스택
 
-5. 설치 방법을 작성한다.
+## 설치 방법
 
-6. 실행 방법을 작성한다.
+확실히 판단 가능한 설치 명령어만 작성
 
-7. 프로젝트 구조를 tree 형태의
-   코드 블록으로 작성한다.
+## 실행 방법
 
-8. 필요한 경우 환경변수 설정 방법도 작성한다.
+확실히 판단 가능한 실행 명령어만 작성
 
-9. 분석 결과에 없는 기능을 지어내지 않는다.
+## 프로젝트 구조
 
-10. 불필요한 문구나 AI가 작성했다는
-    설명은 넣지 않는다.
+중요한 파일을 중심으로 간단한
+트리 구조 작성
 
-11. README 본문만 출력한다.
+규칙:
 
-[GitHub 저장소 분석 결과]
+- 존재하지 않는 기능을 지어내지 않는다.
+- 분석할 수 없는 내용은 억지로 작성하지 않는다.
+- README에 불필요한 장문을 넣지 않는다.
+- Markdown 본문만 반환한다.
+- 프로젝트 구조에는 모든 파일을
+  무조건 나열하지 않는다.
+
+저장소 분석 결과:
 
 {analysis_text}
 """
@@ -110,7 +164,7 @@ README.md를 작성해라.
 
             temperature=0.2,
 
-            max_completion_tokens=5000
+            max_completion_tokens=1800
         )
     )
 
