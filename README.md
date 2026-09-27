@@ -1,184 +1,159 @@
 # CreateREADME.md
 
-## 프로젝트 소개
+## 프로젝트 개요
 
-`CreateREADME.md`는 개발자가 GitHub 저장소의 README.md 파일을 쉽고 빠르게 생성할 수 있도록 돕는 웹 기반 애플리케이션입니다. 저장소 URL을 입력하면, 애플리케이션이 해당 저장소의 코드, 파일 구조, 의존성 등을 분석하고, Google Gemini AI 모델의 강력한 기능을 활용하여 전문적이고 구조화된 README.md 초안을 자동으로 생성해 줍니다. 이 프로젝트는 문서화 작업을 간소화하고, 모든 개발자가 양질의 README 파일을 가질 수 있도록 지원하는 것을 목표로 합니다.
+CreateREADME.md는 GitHub 저장소의 메타데이터와 코드를 분석해 자동으로 README 파일을 생성해 주는 풀스택 애플리케이션입니다.  
+백엔드는 **FastAPI**로 구현되어 GitHub API와 AI 모델(Groq)을 호출하고, 프론트엔드는 **React + Vite**로 사용자 인터페이스를 제공합니다.  
 
 ## 주요 기능
 
-*   **GitHub 저장소 분석:** 입력된 GitHub 저장소 URL을 통해 저장소의 파일 구조, 사용된 언어, 주요 의존성 등을 심층적으로 분석합니다.
-*   **AI 기반 README 생성:** Google Gemini AI 모델을 사용하여 분석된 데이터를 기반으로 `프로젝트 소개`, `주요 기능`, `기술 스택`, `설치 및 실행 방법`, `프로젝트 구조` 등 표준 README 섹션을 포함한 초안을 지능적으로 생성합니다.
-*   **실시간 마크다운 미리보기:** 생성된 README.md 콘텐츠를 실시간으로 마크다운 형식으로 렌더링하여 최종 결과물을 즉시 확인할 수 있습니다.
-*   **사용자 친화적인 웹 인터페이스:** React로 구축된 직관적인 UI를 통해 저장소 URL 입력, 결과 확인 및 복사/다운로드까지 원활한 사용자 경험을 제공합니다.
-*   **다양한 마크다운 기능 지원:** `react-markdown`, `remark-gfm`, `react-syntax-highlighter` 라이브러리를 활용하여 코드 블록 하이라이팅, 표, 체크리스트 등 GitHub Flavored Markdown (GFM)을 풍부하게 표현합니다.
+| 기능 | 설명 |
+|------|------|
+| **레포 분석** | GitHub 저장소의 메타데이터(이름, 설명, 언어, 스타 수 등)를 가져와 JSON 형태로 반환합니다. |
+| **README 생성** | 분석 결과를 바탕으로 Groq AI 모델을 호출해 README 마크다운을 생성합니다. |
+| **프론트엔드 UI** | 사용자가 저장소 소유자와 이름을 입력하면 분석 결과와 생성된 README를 실시간으로 미리보기합니다. |
+| **CORS 지원** | 로컬 개발 환경(`localhost:5173`)에서 API 호출이 가능하도록 CORS 미들웨어를 설정했습니다. |
 
 ## 기술 스택
 
-이 프로젝트는 다음과 같은 기술 스택으로 구성된 풀스택 애플리케이션입니다.
+- **백엔드**  
+  - FastAPI, Uvicorn  
+  - HTTPX (GitHub API 호출)  
+  - python-dotenv (환경 변수 관리)  
+  - Groq (AI 모델 호출)
 
-### 백엔드 (Backend)
-
-*   **언어:** Python
-*   **프레임워크:** FastAPI
-*   **웹 서버:** Uvicorn
-*   **AI 통합:** Google Gemini API (with `google-genai` 라이브러리)
-*   **HTTP 클라이언트:** `httpx` (GitHub API 통신 등)
-*   **환경 변수 관리:** `python-dotenv`
-
-### 프론트엔드 (Frontend)
-
-*   **언어:** JavaScript
-*   **프레임워크:** React.js
-*   **빌드 도구:** Vite
-*   **라우팅:** `react-router-dom`
-*   **마크다운 렌더링:** `react-markdown`
-*   **코드 하이라이팅:** `react-syntax-highlighter`
-*   **GFM 확장:** `remark-gfm`
+- **프론트엔드**  
+  - React 19, Vite  
+  - react-markdown, remark-gfm (마크다운 렌더링)  
+  - react-syntax-highlighter (코드 하이라이트)  
+  - react-router-dom (페이지 라우팅)
 
 ## 설치 방법
 
-프로젝트를 로컬 환경에 설치하고 실행하기 위한 단계별 지침입니다.
-
-### 전제 조건
-
-*   Git
-*   Python 3.8+
-*   Node.js 18+ 및 npm (또는 Yarn)
-*   Google Gemini API Key: [Google AI Studio](https://aistudio.google.com/app/apikey)에서 발급받아야 합니다.
-
-### 1. 저장소 클론
+### 1. 백엔드 설치
 
 ```bash
-git clone https://github.com/your-username/CreateREADME.md.git
-cd CreateREADME.md
-```
-
-### 2. 백엔드 설정
-
-```bash
+# 프로젝트 루트에서
 cd Backend
-```
-
-가상 환경을 생성하고 활성화합니다.
-
-```bash
-python -m venv venv
-# Windows
-.\venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
-```
-
-의존성을 설치합니다.
-
-```bash
 pip install -r requirements.txt
 ```
 
-`.env` 파일을 생성하고 Google Gemini API 키를 추가합니다.
-
-```
-# Backend/.env
-GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
-```
-
-`YOUR_GEMINI_API_KEY` 부분을 발급받은 실제 API 키로 교체해야 합니다.
-
-### 3. 프론트엔드 설정
+### 2. 프론트엔드 설치
 
 ```bash
-cd ../Frontend
-```
-
-의존성을 설치합니다.
-
-```bash
+# 프로젝트 루트에서
+cd Frontend
 npm install
-# 또는 yarn install
-```
-
-프론트엔드 `.env` 파일을 생성하고 백엔드 API 주소를 설정합니다.
-
-```
-# Frontend/.env
-VITE_API_URL="http://localhost:8000" # 백엔드가 실행될 주소
 ```
 
 ## 실행 방법
 
-백엔드와 프론트엔드를 각각 실행해야 합니다.
-
-### 1. 백엔드 실행
-
-`Backend` 디렉토리에서 다음 명령어를 실행합니다. 가상 환경이 활성화되어 있는지 확인하세요.
+### 백엔드 실행
 
 ```bash
-cd Backend
-# 가상 환경이 활성화되지 않았다면:
-# Windows: .\venv\Scripts\activate
-# macOS/Linux: source venv/bin/activate
-
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Backend 디렉터리에서
+uvicorn main:app --reload
 ```
 
-백엔드 서버는 기본적으로 `http://localhost:8000`에서 실행됩니다.
+API는 `http://localhost:8000` 에서 접근 가능합니다.
 
-### 2. 프론트엔드 실행
-
-새로운 터미널을 열고 `Frontend` 디렉토리에서 다음 명령어를 실행합니다.
+### 프론트엔드 실행
 
 ```bash
-cd Frontend
+# Frontend 디렉터리에서
 npm run dev
-# 또는 yarn dev
 ```
 
-프론트엔드 개발 서버는 일반적으로 `http://localhost:5173`에서 실행됩니다. 브라우저를 열어 이 주소로 접속하면 애플리케이션을 사용할 수 있습니다.
+프론트엔드는 `http://localhost:5173` 에서 실행됩니다.
+
+## 환경 변수 설정
+
+백엔드에서 필요한 환경 변수는 `.env` 파일에 정의합니다. 예시:
+
+```
+GITHUB_TOKEN=ghp_your_github_token
+GROQ_API_KEY=sk-your-groq-key
+```
+
+- `GITHUB_TOKEN` : GitHub API 호출 시 인증 토큰  
+- `GROQ_API_KEY` : Groq AI 모델 호출 시 인증 키  
+
+`.env` 파일은 루트에 두고 Git에 커밋하지 않도록 `.gitignore`에 추가되어 있습니다.
+
+## API 엔드포인트
+
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| GET | `/` | API 상태 확인 |
+| GET | `/github/{owner}/{repo}` | 저장소 분석 결과 반환 |
+| GET | `/readme/{owner}/{repo}` | 분석 결과 기반 README 생성 |
 
 ## 프로젝트 구조
-
-프로젝트의 주요 디렉토리 및 파일 구조는 다음과 같습니다.
 
 ```
 CreateREADME.md/
 ├── Backend/
-│   ├── analyzer.py                 # GitHub 저장소 분석 로직
-│   ├── gemini_service.py           # Google Gemini API 호출 및 응답 처리
-│   ├── github_service.py           # GitHub API 호출 및 데이터 가져오기
-│   ├── main.py                     # FastAPI 애플리케이션 엔트리 포인트 (API 라우트 정의)
-│   ├── requirements.txt            # Python 의존성 목록
-│   └── .env.example                # 환경 변수 예시
+│   ├── ai_service.py
+│   ├── analyzer.py
+│   ├── github_service.py
+│   ├── main.py
+│   ├── requirements.txt
+│   └── .gitignore
 ├── Frontend/
+│   ├── .gitignore
+│   ├── README.md
+│   ├── eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
 │   ├── public/
-│   │   ├── favicon.svg             # 파비콘 아이콘
-│   │   └── icons.svg               # SVG 아이콘 컬렉션
+│   │   ├── favicon.svg
+│   │   └── icons.svg
 │   ├── src/
-│   │   ├── assets/                 # 이미지, 로고 등 정적 자산
-│   │   ├── components/             # 재사용 가능한 React UI 컴포넌트
+│   │   ├── App.css
+│   │   ├── App.jsx
+│   │   ├── assets/
+│   │   │   ├── hero.png
+│   │   │   ├── react.svg
+│   │   │   └── vite.svg
+│   │   ├── components/
 │   │   │   ├── DocIcon.jsx
 │   │   │   ├── Footer.jsx
+│   │   │   ├── Footer.module.css
 │   │   │   ├── Header.jsx
-│   │   │   ├── LoadingSpinner.jsx  # 로딩 스피너
-│   │   │   ├── MarkdownPreview.jsx # 마크다운 미리보기 컴포넌트
-│   │   │   └── RepoForm.jsx        # 저장소 URL 입력 폼
+│   │   │   ├── Header.module.css
+│   │   │   ├── LoadingSpinner.jsx
+│   │   │   ├── LoadingSpinner.module.css
+│   │   │   ├── MarkdownPreview.jsx
+│   │   │   ├── MarkdownPreview.module.css
+│   │   │   ├── RepoForm.jsx
+│   │   │   └── RepoForm.module.css
 │   │   ├── hooks/
-│   │   │   └── useReadme.js        # README 데이터 관리를 위한 커스텀 훅
-│   │   ├── pages/                  # 애플리케이션의 각 페이지 컴포넌트
-│   │   │   ├── CreatePage.jsx      # README 생성 페이지
-│   │   │   ├── HomePage.jsx        # 메인/시작 페이지
-│   │   │   ├── LandingPage.jsx     # 랜딩 페이지
-│   │   │   └── ResultPage.jsx      # 생성된 README 결과 페이지
+│   │   │   └── useReadme.js
+│   │   ├── index.css
+│   │   ├── main.jsx
+│   │   ├── pages/
+│   │   │   ├── CreatePage.jsx
+│   │   │   ├── CreatePage.module.css
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── HomePage.module.css
+│   │   │   ├── LandingPage.jsx
+│   │   │   ├── LandingPage.module.css
+│   │   │   ├── ResultPage.jsx
+│   │   │   └── ResultPage.module.css
 │   │   ├── services/
-│   │   │   └── api.js              # 백엔드 API와의 통신 로직
-│   │   ├── App.css
-│   │   ├── App.jsx                 # 메인 애플리케이션 컴포넌트
-│   │   ├── index.css               # 전역 스타일
-│   │   └── main.jsx                # React 애플리케이션 엔트리 포인트
-│   ├── .gitignore                  # Git 무시 파일
-│   ├── eslint.config.js            # ESLint 설정
-│   ├── index.html                  # HTML 템플릿
-│   ├── package-lock.json           # npm 의존성 잠금 파일
-│   ├── package.json                # Node.js 의존성 및 스크립트
-│   └── vite.config.js              # Vite 빌드 설정
-└── .gitignore                      # Git 무시 파일
+│   │   │   └── api.js
+│   │   └── vite.config.js
+│   └── package.json
+└── README.md
 ```
+
+## 기여 방법
+
+1. 이슈를 통해 기능 제안 또는 버그 리포트  
+2. 풀 리퀘스트를 통해 코드 기여  
+3. `Backend`와 `Frontend` 각각의 `README.md`를 참고하여 개발 진행  
+
+## 라이선스
+
+이 프로젝트는 MIT 라이선스 하에 배포됩니다. 자세한 내용은 `LICENSE` 파일을 확인하세요.
