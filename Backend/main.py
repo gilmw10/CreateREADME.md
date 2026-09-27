@@ -1,10 +1,23 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 
 from github_service import get_analysis
 from ai_service import generate_readme
 
 
 app = FastAPI()
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
@@ -43,13 +56,11 @@ async def create_readme(
     repo: str
 ):
     try:
-        # GitHub 저장소 분석
         analysis = await get_analysis(
             owner,
             repo
         )
 
-        # AI README 생성
         readme = await generate_readme(
             analysis
         )

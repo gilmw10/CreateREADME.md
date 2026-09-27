@@ -60,7 +60,7 @@ README.md를 작성해라.
 
 [작성 규칙]
 
-0. 이모티콘은 사용하지 않는다.
+0. 이모티콘은 사용하지 않고 한국어로 작성한다.
 
 1. 가장 위에는 프로젝트 이름을
    # 제목 형식으로 작성한다.
@@ -95,7 +95,7 @@ README.md를 작성해라.
 
     response = await (
         client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-20b",
 
             messages=[
                 {
