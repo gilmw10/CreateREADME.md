@@ -20,6 +20,11 @@ export default function CreatePage() {
   return (
     <div className={styles.page}>
       <Header />
+      <div className={styles.toolbar}>
+        <button type="button" className={styles.btnBack} onClick={() => navigate('/')}>
+          ← Back to Home
+        </button>
+      </div>
       <main className={styles.main}>
         <div className={styles.card}>
           {loading ? (

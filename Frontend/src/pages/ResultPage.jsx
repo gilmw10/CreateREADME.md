@@ -45,8 +45,8 @@ export default function ResultPage() {
     <div className={styles.page}>
       <Header />
       <div className={styles.toolbar}>
-        <button className={styles.btnBack} onClick={() => navigate('/create')}>
-          ← New Create
+        <button type="button" className={styles.btnBack} onClick={() => navigate('/')}>
+          ← Back to Home
         </button>
         <div className={styles.btnGroup}>
           <button className={styles.btnDownload} onClick={handleDownload}>

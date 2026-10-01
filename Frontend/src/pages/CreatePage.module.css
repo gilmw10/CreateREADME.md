@@ -5,6 +5,26 @@
   background: #EBEBEB;
 }
 
+.toolbar {
+  padding: 8px 24px 12px;
+}
+
+.btnBack {
+  background: #FFFFFF;
+  border: 1px solid #BBBBBB;
+  border-radius: 40px;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333333;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnBack:hover {
+  background: #F5F5F5;
+}
+
 .main {
   flex: 1;
   display: flex;
